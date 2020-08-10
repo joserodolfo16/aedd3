@@ -14,6 +14,12 @@ public:
 	celula(string n){
 		nome = n;
 	}
+	//novo construtor
+	celula (string n, celula *p)
+	{
+		nome = n;
+		proxima = p;
+	}//fim. revisado com a aula
 	string getNome(){
 		return nome;
 	}
@@ -52,7 +58,7 @@ public:
 	}
 	
 	void inserirFim(string n){
-		celula *nova = new celula(n);
+		celula *nova = new celula(n, NULL);
 		nova->setProxima(NULL);
 		if(inicio != NULL)
 		{			
