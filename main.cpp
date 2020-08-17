@@ -6,33 +6,50 @@ class celula
 {
 private:
 	string nome;
-	celula * proxima;	
-public:	
-	celula(){
+	string dados;
+	celula * proxima;
+public:
+	celula()
+	{
 		proxima = NULL;
 	}
-	celula(string n){
+	celula(string n)
+	{
 		nome = n;
 	}
-	//novo construtor
-	celula (string n, celula *p)
+	celula(string n, celula *p)
 	{
 		nome = n;
 		proxima = p;
-	}//fim. revisado com a aula
-	string getNome(){
+	}
+	celula(string n, string d, celula *p){
+		nome = n;
+		dados = d;
+		proxima = p;
+	}
+	string getNome()
+	{
 		return nome;
 	}
-	void setNome(string n){
+	void setNome(string n)
+	{
 		nome = n;
 	}
-	
-	celula * getProxima(){
+
+	celula * getProxima()
+	{
 		return proxima;
 	}
-	
-	void setProxima(celula * l){
+
+	void setProxima(celula * l)
+	{
 		proxima = l;
+	}
+	string getDados(){
+		return dados;
+	}
+	void setDados(string d){
+		dados = d;
 	}
 };
 
@@ -41,59 +58,87 @@ class lista
 {
 private:
 	celula * inicio;
-	
+
 public:
-	lista(){
+	lista()
+	{
 		inicio = NULL;
 	}
-	celula * getInicio(){
+	~lista(){
+		esvaziar();
+	}
+	lista(celula *i)
+	{
+		inicio = i;
+	}
+	celula * getInicio()
+	{
 		return inicio;
 	}
-	
-	void inserirInicio(string n){
+
+	void inserirInicio(string n, string d)
+	{
 		celula *nova = new celula;
 		nova->setNome(n);
 		nova->setProxima(inicio);
+		nova->setDados(d);
 		inicio = nova;
 	}
-	
-	void inserirFim(string n){
-		celula *nova = new celula(n, NULL);
-		nova->setProxima(NULL);
-		if(inicio != NULL)
-		{			
+
+	void inserirFim(string n, string d)
+	{
+		if(inicio == NULL)
+		{
+			inserirInicio(n, d);
+		}
+		else
+		{
 			celula *aux = inicio;
 			while(aux->getProxima() != NULL)
 			{
 				aux = aux->getProxima();
 			}
-			aux->setProxima(nova);
-		}
-		else{
-			inicio = nova;
+			celula *nova = new celula(n, d, NULL);
+			aux->setProxima(nova); 
 		}
 	}
-	
-	void imprimir(){
-		if(inicio == NULL){
+
+
+	void imprimir()
+	{
+		if(inicio == NULL)
+		{
 			cout << "Lista vazia.\n";
 		}
-		else{
+		else
+		{
 			celula *aux = inicio;
-			while(aux != NULL){
-				cout << aux->getNome() << endl;
+			while(aux != NULL)
+			{
+				cout << aux->getNome() << " - " << aux->getDados() << endl;
 				aux = aux->getProxima();
 			}
 		}
 	}
+	
+	void esvaziar(){
+		celula *aux = inicio;
+		while(aux != NULL){
+			inicio = inicio->getProxima();
+			delete aux;
+			aux = inicio;
+		}
+		cout << "\n----Memoria liberada----\n";
+	}
 };
 
-int main(){
+int main()
+{
 	lista listaAlunos;
-	listaAlunos.inserirFim("Joao");
-	listaAlunos.inserirFim("Maria");
-	listaAlunos.inserirFim("Jose");
-	listaAlunos.inserirInicio("Miguel");
+	listaAlunos.inserirInicio("----", "Lista do churras -----");
+	listaAlunos.inserirFim("Miguel", "18 anos, Masculino, bebe.");
+	listaAlunos.inserirFim("Jorge", "20 anos, Masculino, bebe.");
+	listaAlunos.inserirFim("Ana", "22 anos, Feminino, nao bebe.");
 	listaAlunos.imprimir();
 	return 0;
 }
